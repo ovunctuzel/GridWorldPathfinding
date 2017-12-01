@@ -114,6 +114,10 @@ Remarks on Complexity
 ---------------------------------------
 The A* algorithm has a time and space complexity of O(b^d), where b is the branching factor, and d is the depth of the optimal path. The branching factor is 4 when the grid world is orthogonally connected. For configuration spaces with relatively few number of nodes, and static obstacles, A* is one of the most reliable algorithms when an admissible heuristic is used. 
 
+The random walk algorithm is stochastic by its nature. There is no guarantee that the goal will be found in a certain number of steps. However, the algorithm is probabilistically complete. As the number of steps taken approaches infinity, the probability of finding a solution approaches 1. The worst case scenario of this algorithm is unbounded, however an expected time for covering all nodes in the graph can be stated. 
+
+Let n be the number of nodes in the graph, and m be the number of connections. In an undirected graph, we would have a maximum of n(n-1) connections. In order to have an expected value of covering all the connections, we would have to visit each node n-1 times. Thus, the expected cover time would be n(n-1)(n-1), which can be stated as O(n^3). However, in an orthogonally connected grid world, the number of connections would be 4n, and the complexity can be stated as O(n^2).
+
 Benchmarking Code
 ---------------------------------------
 .. automodule:: benchmarks
