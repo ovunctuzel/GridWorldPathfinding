@@ -1,22 +1,24 @@
+""" Python module for path planning algorithms on a 2D grid world. """
+
 import tools
 import time
 import math
 import heapq
 
 
-def planner_random(world_state, robot_pose, goal_pose, max_step_number=100):
+def planner_random(world_state, robot_pose, goal_pose, max_step_number=10000):
     """ Random walk path planner
 
     :param world_state: 2D matrix representing the world
     :param robot_pose: Tuple of robot pose
     :param goal_pose: Tuple of goal pose
     :param max_step_number: Max number of iterations before terminating
-    :return: Returns path, a list of tuples of (x, y) coordinates - Returns empty list if there is an error
+    :return: Returns path, a list of tuples of (x, y) coordinates - Returns None if there is an error
 
     """
 
     if not tools.validate_input(world_state, robot_pose, goal_pose):
-        return []
+        return None
 
     success = False
     iters = 0
@@ -39,18 +41,18 @@ def planner_random(world_state, robot_pose, goal_pose, max_step_number=100):
 
     if not success:
         print "ERROR: Failed to find a feasible path in %d steps" % max_step_number
-        return []
+        return None
 
     return path
 
 
 def planner_optimal(world_state, robot_pose, goal_pose):
-    """ Optimal A* path planner with manhattan distance heuristic
+    """ Optimal A* path planner with manhattan distance heuristic. Assumes admissible heuristic.
 
     :param world_state: 2D matrix representing the world
     :param robot_pose: Tuple of robot pose
     :param goal_pose: Tuple of goal pose
-    :return: Returns path, a list of tuples of (x, y) coordinates - Returns empty list if there is an error
+    :return: Returns path, a list of tuples of (x, y) coordinates - Returns None if there is an error
 
     """
 
@@ -61,7 +63,7 @@ def planner_optimal(world_state, robot_pose, goal_pose):
         parent_matrix[nbor[0]][nbor[1]] = current
 
     if not tools.validate_input(world_state, robot_pose, goal_pose):
-        return []
+        return None
 
     success = False
     # Initialize open (frontier) and closed lists
@@ -108,7 +110,7 @@ def planner_optimal(world_state, robot_pose, goal_pose):
 
     if not success:
         print "ERROR: Failed to find a feasible path"
-        return []
+        return None
 
     path = [goal_pose]
     # Construct final path from parent_matrix
@@ -120,9 +122,9 @@ def planner_optimal(world_state, robot_pose, goal_pose):
     return path
 
 
-# TODO: Benchmarks, Documentation
 if __name__ == '__main__':
-    # Simple example
+    # Simple example for planner usage
+    # User can adjust parameters world, start_pose, and goal_pose to get results on planners
     world = [[1, 1, 1, 0, 0, 0, 0],
              [1, 1, 1, 0, 0, 1, 0],
              [1, 0, 0, 0, 0, 1, 1],
@@ -134,14 +136,16 @@ if __name__ == '__main__':
              [1, 0, 0, 0, 0, 0, 0],
              [1, 1, 1, 1, 0, 0, 0]]
 
+    start_pose = (3, 1)
+    end_pose = (5, 1)
     t = time.time()
-    optimal_path = planner_optimal(world, (3, 1), (5, 1))
-    print "Time elapsed: ", (time.time() - t) * 1000, "ms"
+    optimal_path = planner_optimal(world, start_pose, end_pose)
+    print "Time elapsed: ", tools.sec_to_ms(time.time() - t), "ms"
     print "Optimal path: ", optimal_path
     print "Length: ", tools.path_length(optimal_path)
 
     t = time.time()
-    random_path = planner_random(world, (3, 1), (5, 1))
-    print "Time elapsed: ", (time.time() - t) * 1000, "ms"
+    random_path = planner_random(world, start_pose, end_pose)
+    print "Time elapsed: ", tools.sec_to_ms(time.time() - t), "ms"
     print "Random path: ", random_path
     print "Length: ", tools.path_length(random_path)

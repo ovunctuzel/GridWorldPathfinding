@@ -1,3 +1,6 @@
+""" Benchmark module for evaluating planners performance by reporting results on computation time and path length.
+    Three sample problems have been selected from http://www.movingai.com/benchmarks/ website. """
+
 import tools
 import random
 import time
@@ -6,7 +9,8 @@ import numpy as np
 
 
 def benchmark(problem_file, test_set_file):
-    """ Evaluates planners with a random problem from a given problem set and world map
+    """ Evaluates planners with a random problem from a given problem set and world map.
+        Assumes feasible paths can be calculated.
 
         :param problem_file: A string of map file with .map extension
         :param test_set_file: A string of problem set file with .scen extension
@@ -59,8 +63,11 @@ def statistics(benchmarks):
 
 
 if __name__ == '__main__':
+    # Piece of code for getting statistical results on a problem set.
+    # Reports mean path cost and time elapsed and standard deviations.
+    # Problem sets and maps are acquired from http://www.movingai.com/benchmarks/
     benchmarks = []
-    for i in range(100):
-        benchmarks.append(benchmark('benchmarks/dragonage.map', 'benchmarks/dragonage.map.scen'))
+    for i in range(1):
+        benchmarks.append(benchmark('../benchmarks/dragonage.map', '../benchmarks/dragonage.map.scen'))
     statistics(benchmarks)
     benchmarks = []

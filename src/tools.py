@@ -1,9 +1,12 @@
+""" Module for helper functions for the planners. """
+
 import math
 import random
 
 
 def sec_to_ms(secs):
     return secs * 1000.0
+
 
 def within_bounds(world_state, pose):
     """ Returns true if pose is inside bounds of world_state """
