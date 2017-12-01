@@ -1,0 +1,340 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Grid World Pathfinding Documentation &#8212; Pathfinding 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">Pathfinding 1.0.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="grid-world-pathfinding-documentation">
+<h1>Grid World Pathfinding Documentation<a class="headerlink" href="#grid-world-pathfinding-documentation" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://github.com/ovunctuzel/GridWorldPathfinding">GitHub Repository</a></p>
+<dl class="docutils">
+<dt>Requirements:</dt>
+<dd><ul class="first last simple">
+<li><a class="reference external" href="http://www.numpy.org/">numpy</a> (Only for benchmarks)</li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="module-algorithms">
+<span id="planners"></span><h1>Planners<a class="headerlink" href="#module-algorithms" title="Permalink to this headline">¶</a></h1>
+<p>Python module for path planning algorithms on a 2D grid world.</p>
+<dl class="function">
+<dt id="algorithms.planner_optimal">
+<code class="descclassname">algorithms.</code><code class="descname">planner_optimal</code><span class="sig-paren">(</span><em>world_state</em>, <em>robot_pose</em>, <em>goal_pose</em><span class="sig-paren">)</span><a class="headerlink" href="#algorithms.planner_optimal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Optimal A* path planner with manhattan distance heuristic. Assumes admissible heuristic.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>world_state</strong> &#8211; 2D matrix representing the world</li>
+<li><strong>robot_pose</strong> &#8211; Tuple of robot pose</li>
+<li><strong>goal_pose</strong> &#8211; Tuple of goal pose</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Returns path, a list of tuples of (x, y) coordinates - Returns None if there is an error</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="algorithms.planner_random">
+<code class="descclassname">algorithms.</code><code class="descname">planner_random</code><span class="sig-paren">(</span><em>world_state</em>, <em>robot_pose</em>, <em>goal_pose</em>, <em>max_step_number=10000</em><span class="sig-paren">)</span><a class="headerlink" href="#algorithms.planner_random" title="Permalink to this definition">¶</a></dt>
+<dd><p>Random walk path planner</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>world_state</strong> &#8211; 2D matrix representing the world</li>
+<li><strong>robot_pose</strong> &#8211; Tuple of robot pose</li>
+<li><strong>goal_pose</strong> &#8211; Tuple of goal pose</li>
+<li><strong>max_step_number</strong> &#8211; Max number of iterations before terminating</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Returns path, a list of tuples of (x, y) coordinates - Returns None if there is an error</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Planners in this module compute a path from start_pose to goal_pose given a world represented by a 2D list, with 1&#8217;s denoting obstacles and 0&#8217;s denoting free space.</p>
+<p>The random planner is implemented as a simple algorithm where random steps are taken from the start_pose until goal_pose is reached within <code class="docutils literal"><span class="pre">max_step_number</span></code> steps. The last <code class="docutils literal"><span class="pre">sqrt(max_step_number)</span></code> steps are stored in the list <code class="docutils literal"><span class="pre">visited</span></code>, and if possible, the random walk refrains from visiting cells in this list. The planner returns a path, a list of coordinates to reach the <code class="docutils literal"><span class="pre">goal_pose</span></code> from the <code class="docutils literal"><span class="pre">start_pose</span></code>, if successful. If a feasible path is not calculated in <code class="docutils literal"><span class="pre">max_step_number</span></code> steps, or the start or goal states are occupied, the planner will return <code class="docutils literal"><span class="pre">None</span></code>.</p>
+<p>The optimal planner is implemented as a A* Search algorithm. The planner returns a path if successful, and returns <code class="docutils literal"><span class="pre">None</span></code> if it fails. The heuristic is selected as the manhattan distance, which is proven to be admissible in orthogonally connected grid worlds.</p>
+<p><a class="reference external" href="https://en.wikipedia.org/wiki/A*_search_algorithm">More on A* Pathfinding Algorithm</a></p>
+</div>
+<div class="section" id="simple-example">
+<h1>Simple Example<a class="headerlink" href="#simple-example" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># Simple example for planner usage</span>
+<span class="c1"># User can adjust parameters world, start_pose, and goal_pose to get results on planners</span>
+<span class="n">world</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+         <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+         <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+         <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+         <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+         <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+         <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+         <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+         <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+         <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]</span>
+
+<span class="n">start_pose</span> <span class="o">=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">end_pose</span> <span class="o">=</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="n">t</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="n">optimal_path</span> <span class="o">=</span> <span class="n">planner_optimal</span><span class="p">(</span><span class="n">world</span><span class="p">,</span> <span class="n">start_pose</span><span class="p">,</span> <span class="n">end_pose</span><span class="p">)</span>
+<span class="nb">print</span> <span class="s2">&quot;Time elapsed: &quot;</span><span class="p">,</span> <span class="n">tools</span><span class="o">.</span><span class="n">sec_to_ms</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">t</span><span class="p">),</span> <span class="s2">&quot;ms&quot;</span>
+<span class="nb">print</span> <span class="s2">&quot;Optimal path: &quot;</span><span class="p">,</span> <span class="n">optimal_path</span>
+<span class="nb">print</span> <span class="s2">&quot;Length: &quot;</span><span class="p">,</span> <span class="n">tools</span><span class="o">.</span><span class="n">path_length</span><span class="p">(</span><span class="n">optimal_path</span><span class="p">)</span>
+
+<span class="n">t</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="n">random_path</span> <span class="o">=</span> <span class="n">planner_random</span><span class="p">(</span><span class="n">world</span><span class="p">,</span> <span class="n">start_pose</span><span class="p">,</span> <span class="n">end_pose</span><span class="p">)</span>
+<span class="nb">print</span> <span class="s2">&quot;Time elapsed: &quot;</span><span class="p">,</span> <span class="n">tools</span><span class="o">.</span><span class="n">sec_to_ms</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">t</span><span class="p">),</span> <span class="s2">&quot;ms&quot;</span>
+<span class="nb">print</span> <span class="s2">&quot;Random path: &quot;</span><span class="p">,</span> <span class="n">random_path</span>
+<span class="nb">print</span> <span class="s2">&quot;Length: &quot;</span><span class="p">,</span> <span class="n">tools</span><span class="o">.</span><span class="n">path_length</span><span class="p">(</span><span class="n">random_path</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The above code will print:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>Time elapsed:  0.618934631348 ms
+Optimal path:  [(3, 1), (2, 1), (2, 2), (2, 3), (2, 4), (3, 4), (4, 4), (4, 5), (4, 6), (5, 6), (6, 6), (7, 6), (7, 5), (7, 4), (8, 4), (8, 3), (8, 2), (7, 2), (7, 1), (6, 1), (5, 1)]
+Length:  20.0
+Time elapsed:  0.396013259888 ms
+Random path:  [(3, 1), (3, 2), (2, 2), (2, 1), (2, 2), (2, 3), (1, 3), (1, 4), (2, 4), (3, 4), (4, 4), (4, 3), (4, 4), (4, 5), (3, 5), (3, 6), (4, 6), (5, 6), (6, 6), (7, 6), (7, 5), (8, 5), (8, 6), (9, 6), (9, 5), (9, 4), (8, 4), (8, 3), (8, 2), (7, 2), (7, 1), (6, 1), (5, 1)]
+Length:  32.0
+</pre></div>
+</div>
+</div>
+<div class="section" id="module-tools">
+<span id="helper-tools"></span><h1>Helper Tools<a class="headerlink" href="#module-tools" title="Permalink to this headline">¶</a></h1>
+<p>Module for helper functions for the planners.</p>
+<dl class="function">
+<dt id="tools.get_octile_nbors">
+<code class="descclassname">tools.</code><code class="descname">get_octile_nbors</code><span class="sig-paren">(</span><em>world_state</em>, <em>pose</em><span class="sig-paren">)</span><a class="headerlink" href="#tools.get_octile_nbors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of unoccupied octile neighbors of a cell &#8216;pose&#8217;</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tools.get_orthogonal_nbors">
+<code class="descclassname">tools.</code><code class="descname">get_orthogonal_nbors</code><span class="sig-paren">(</span><em>world_state</em>, <em>pose</em><span class="sig-paren">)</span><a class="headerlink" href="#tools.get_orthogonal_nbors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of unoccupied orthogonal neighbors of a cell &#8216;pose&#8217;</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tools.manhattan_dist">
+<code class="descclassname">tools.</code><code class="descname">manhattan_dist</code><span class="sig-paren">(</span><em>pose1</em>, <em>pose2</em><span class="sig-paren">)</span><a class="headerlink" href="#tools.manhattan_dist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns manhattan distance between two poses</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tools.path_length">
+<code class="descclassname">tools.</code><code class="descname">path_length</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="headerlink" href="#tools.path_length" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns path length. Useful if neighborhoods other than orthogonal is allowed.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tools.random_walk">
+<code class="descclassname">tools.</code><code class="descname">random_walk</code><span class="sig-paren">(</span><em>world_state</em>, <em>pose</em><span class="sig-paren">)</span><a class="headerlink" href="#tools.random_walk" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns tuple of a random valid neighboring cell to cell &#8216;pose&#8217;</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tools.random_walk_memory">
+<code class="descclassname">tools.</code><code class="descname">random_walk_memory</code><span class="sig-paren">(</span><em>world_state</em>, <em>pose</em>, <em>visited</em><span class="sig-paren">)</span><a class="headerlink" href="#tools.random_walk_memory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a random valid neighboring cell that is not recently visited.
+Can return visited cells if there is no other option</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tools.read_world_file">
+<code class="descclassname">tools.</code><code class="descname">read_world_file</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="headerlink" href="#tools.read_world_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads world from file, returns world_state as 2D list</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tools.validate_input">
+<code class="descclassname">tools.</code><code class="descname">validate_input</code><span class="sig-paren">(</span><em>world_state</em>, <em>start_pose</em>, <em>goal_pose</em><span class="sig-paren">)</span><a class="headerlink" href="#tools.validate_input" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns false and prints error message if inputs to the planner are not valid - Returns true otherwise</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tools.within_bounds">
+<code class="descclassname">tools.</code><code class="descname">within_bounds</code><span class="sig-paren">(</span><em>world_state</em>, <em>pose</em><span class="sig-paren">)</span><a class="headerlink" href="#tools.within_bounds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns true if pose is inside bounds of world_state</p>
+</dd></dl>
+
+</div>
+<div class="section" id="benchmarks">
+<h1>Benchmarks<a class="headerlink" href="#benchmarks" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="benchmark-results">
+<h2>Benchmark Results<a class="headerlink" href="#benchmark-results" title="Permalink to this headline">¶</a></h2>
+<p>Benchmark results are obtained by selecting random problems from three hand picked problem sets from the Moving AI lab website. Problem sets and world files can be found in the benchmarks folder. Additional benchmarks can be downloaded at:</p>
+<p><a class="reference external" href="http://www.movingai.com/benchmarks/">MovingAI LAB</a></p>
+<p>The problem sets are:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://www.movingai.com/benchmarks/dao/lak110d.jpg">tiny.map.scen</a> 21x30 map with relatively few open spaces. Similar to a generic indoor environment.</li>
+<li><a class="reference external" href="http://www.movingai.com/benchmarks/dao/lak103d.jpg">dragonage.map.scen</a> 49x49 map ripped from the video game Dragon Age: Origins. Similar to a generic outdoor environment.</li>
+<li><a class="reference external" href="http://www.movingai.com/benchmarks/mazes1/maze512-1-0.jpg">maze.map.scen</a> 512x512 map with very complex corridors of width 1. Artificial environment for testing.</li>
+</ul>
+<p>Each problem set contains hundreds of problems with valid start and goal positions, and a world map. The world map representation is slightly different, with <code class="docutils literal"><span class="pre">.</span></code> denoting empty states. The world maps are converted to 1 and 0 representation with the <a class="reference internal" href="#tools.read_world_file" title="tools.read_world_file"><code class="xref py py-func docutils literal"><span class="pre">tools.read_world_file()</span></code></a> function.</p>
+<p>100 problems are picked randomly from each problem set, and path lengths and computation times are calculated. Means and standard deviations are reported for each problem set.</p>
+<img alt="_images/table1.png" src="_images/table1.png" />
+<p>The A* algorithm can find the optimal path reasonably fast in all three problems. Even the complicated maze problem can be solved in about a second on average.</p>
+<img alt="_images/table2.png" src="_images/table2.png" />
+<p>The random planner is only viable in tiny maps with narrow corridors. Compared to the A* algorithm, the random planner performed an order of magnitude worse. Even in the smallest map in the problem set, the mean path length is 357.88 compared to A*&#8217;s 14.92, and the computation speed is 7 times slower. The difference is even larger with the intermediate sized map, and the random planner completely fails to find a path in 100000 steps, thus, no results are provided on the random planner with the maze map.</p>
+</div>
+<div class="section" id="code-correctness">
+<h2>Code Correctness<a class="headerlink" href="#code-correctness" title="Permalink to this headline">¶</a></h2>
+<p>Optimality of the A* Algorithm has been verified by selecting many problems from the problem sets and comparing the path lengths computed with the planner with the values reported in the sets. All tests were passed. Since the problem sets are originally 8-connected, octile neighborhoods were allowed when testing this way.</p>
+</div>
+<div class="section" id="remarks-on-complexity">
+<h2>Remarks on Complexity<a class="headerlink" href="#remarks-on-complexity" title="Permalink to this headline">¶</a></h2>
+<p>The A* algorithm has a time and space complexity of O(b^d), where b is the branching factor, and d is the depth of the optimal path. The branching factor is 4 when the grid world is orthogonally connected. For configuration spaces with relatively few number of nodes, and static obstacles, A* is one of the most reliable algorithms when an admissible heuristic is used.</p>
+<p>The random walk algorithm is stochastic by its nature. There is no guarantee that the goal will be found in a certain number of steps. However, the algorithm is probabilistically complete. As the number of steps taken approaches infinity, the probability of finding a solution approaches 1. The worst case scenario of this algorithm is unbounded, however an expected time for covering all nodes in the graph can be stated.</p>
+<p>Let n be the number of nodes in the graph, and m be the number of connections. In an undirected graph, we would have a maximum of n(n-1) connections. In order to have an expected value of covering all the connections, we would have to visit each node n-1 times. Thus, the expected cover time would be n(n-1)(n-1), which can be stated as O(n^3). However, in an orthogonally connected grid world, the number of connections would be 4n, and the complexity can be stated as O(n^2).</p>
+</div>
+<div class="section" id="module-benchmarks">
+<span id="benchmarking-code"></span><h2>Benchmarking Code<a class="headerlink" href="#module-benchmarks" title="Permalink to this headline">¶</a></h2>
+<p>Benchmark module for evaluating planners performance by reporting results on computation time and path length.
+Three sample problems have been selected from <a class="reference external" href="http://www.movingai.com/benchmarks/">http://www.movingai.com/benchmarks/</a> website.</p>
+<dl class="function">
+<dt id="benchmarks.benchmark">
+<code class="descclassname">benchmarks.</code><code class="descname">benchmark</code><span class="sig-paren">(</span><em>problem_file</em>, <em>test_set_file</em><span class="sig-paren">)</span><a class="headerlink" href="#benchmarks.benchmark" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluates planners with a random problem from a given problem set and world map.
+Assumes feasible paths can be calculated.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>problem_file</strong> &#8211; A string of map file with .map extension</li>
+<li><strong>test_set_file</strong> &#8211; A string of problem set file with .scen extension</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Returns a tuple of (results_optimal, results_random) where each element is a custom data structure
+carrying calculated path, path length and time elapsed to calculate path.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="benchmarks.statistics">
+<code class="descclassname">benchmarks.</code><code class="descname">statistics</code><span class="sig-paren">(</span><em>benchmarks</em><span class="sig-paren">)</span><a class="headerlink" href="#benchmarks.statistics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints statistical results for a given set of benchmarks.
+Reports mean and standard deviations on total path length and standard deviations</p>
+</dd></dl>
+
+<div class="toctree-wrapper compound">
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Grid World Pathfinding Documentation</a></li>
+<li><a class="reference internal" href="#module-algorithms">Planners</a></li>
+<li><a class="reference internal" href="#simple-example">Simple Example</a></li>
+<li><a class="reference internal" href="#module-tools">Helper Tools</a></li>
+<li><a class="reference internal" href="#benchmarks">Benchmarks</a><ul>
+<li><a class="reference internal" href="#benchmark-results">Benchmark Results</a></li>
+<li><a class="reference internal" href="#code-correctness">Code Correctness</a></li>
+<li><a class="reference internal" href="#remarks-on-complexity">Remarks on Complexity</a></li>
+<li><a class="reference internal" href="#module-benchmarks">Benchmarking Code</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">Pathfinding 1.0.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Ovunc Tuzel.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.5.
+    </div>
+  </body>
+</html>
